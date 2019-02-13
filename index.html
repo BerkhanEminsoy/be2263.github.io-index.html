@@ -3,18 +3,21 @@
 <!--while this is not; "<!comment>"; so what is it?-->
 <!-- does d3 run javascript code?-->
 <!-- editing from atom and pushing it from gitdesktop to github vs. editing from chrome developer tools; how are they different?-->
+<!-- why can't I delete the index_files that chrome developer tools created, from the gitdesktop directory?-->
 <html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>be2263 | DATA VIZ</title>
-        <link rel="stylesheet" type="text/css" href="./css/style.css">
-        <title>D3 Page Template</title>
-        <script type="text/javascript" src="./d3/d3.js"></script>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <link rel="stylesheet" type="text/css" href="./css/style.css">
+      <script type="text/javascript" src="./d3/d3.js"></script>
+      <title>be2263 | DATA VIZ</title>
+      <title>D3 Page Template</title>
     </head>
     <body>
       <script type="text/javascript">
       // Your beautiful D3 code will go here
+        d3.select("body").append("p").text("New Paragrah!");
       </script>
+      <p>New Paragraph!</p>
       <div id="title">
               Berkhan Eminsoy | Spring '19 | DATA Visualization Class
       </div>
