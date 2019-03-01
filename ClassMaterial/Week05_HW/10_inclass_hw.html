@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3: Test of formatted axis values</title>
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<style type="text/css">
+			/* No style rules here yet */
+		</style>
+	</head>
+	<body>
+        <div id="commuting"></div>
+
+		<script type="text/javascript">
+
+    /*
+    THE OLD VERSION I USED IN CLASS
+          d3.csv("inClassSurveyData.csv",function(data){
+              drawCommute(data)
+          })*/
+
+
+
+    //THE NEW SYNTAX THAT IS REQUIRED
+    d3.csv("inClassSurveyData.csv")
+    .then(function(data) {
+        drawCommute(data)
+    })
+    .catch(function(error){
+        //THIS area is for in case of an error loading your data
+        //we are not using it now
+    })
+
+    //drawing the circles
+    function drawCommute(data){
+
+        var w = 800
+        var h = 420
+        var padding = 30
+        var r = 5
+        var svg = d3.select("#commuting")
+            .append("svg")
+            .attr("width",w)
+            .attr("height",h)
+
+        //the linear scale declaration
+        var xScale = d3.scaleLinear()
+		        .domain([0,90])  //you put the min and max value of data here
+		        .range([0,w-padding])//you put the min and max value you want to scale to here, in our case the entire width minus a margin so nothing gets cut off.
+
+				var rScale = d3.scaleLinear()
+						.domain([0, d3.max(data, function(d){return d.commute; })])
+						.range([5,50]);
+
+				var xAxis = d3.axisBottom()
+						.scale(xScale)
+						.ticks(5)
+
+        svg.selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx",function(d,i){
+                //then we apply the scale
+                //we apply the x scale to the commute value and return it
+                return  xScale(d.commute)
+            })
+            .attr("cy",h/2)//set y of circles at half of height
+            .attr("r",function(d,i){
+								return rScale(d.commute)
+						})
+            .style("fill","black")
+            .style("opacity",.5)
+
+				svg.append("g")
+						.attr("transform", "translate(0," + (h - padding) + ")")
+						.call(xAxis);
+
+				/*Create Y-axis, if we define it in the future
+				svg.append("g")
+						.call(yAxis);
+				Create Y-axis out*/
+
+        //for HW:
+        //add another scale to a different dimension such as r, or color, opacity.
+        //please add a axis to it after you read chapter 8.
+
+        //IF YOU NEED A HINT:
+		//Create X axis - you need to defin the axes, append it to the svg.
+        //look at chapter 8, 02_axes_bottom.html
+        //to define an axis, you can refer to code in that file starting at line 39
+        //to append it to the svg, you can refer to code starting at line 82
+
+    }
+
+
+
+		</script>
+	</body>
+</html>
