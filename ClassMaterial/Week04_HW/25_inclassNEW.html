@@ -27,11 +27,14 @@
 		<script type="text/javascript">
 
         //Imports a dataset from the file
-		d3.csv("data.csv", function(data) {
-				console.log(data);
-            //within this data context, call the function that draws the circles and pass those circles your data
-		    drawCircles(data)//here you are passing the dataset from data.csv into your function
-        });
+		d3.csv("data.csv")
+			.then(function(data) {
+					drawCircles(data)
+			})
+			.catch(function(error){
+					//THIS area is for in case of an error loading your data
+					//we are not using it now
+			})
 
 
         //here is the function draw circles which you called above
