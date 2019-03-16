@@ -74,7 +74,7 @@
     <div id="chart1"></div>
 
     <div id="moreInfo" class = "hidden">
-			<p>More Info!</p>
+			<p><strong>More Info!</strong></p>
 			<p><span id="info"></span></p>
 		</div>
 
@@ -166,41 +166,51 @@
 													.style("left", tx + "px")
 													.style("top", ty + 65 + "px")
 													.select("#info")
-													.text("belongs to "+d.school+" "+
-																"born on "+d.birthmonth+" "+
-																"prefers "+d.coffeeTea+" "+
-																"familiarity with the command line: "+d.commandLine+" "+
-																"bikes? "+d.bikes+" "+
-																"git? "+d.git+" "+
-																"cats? "+d.cats+" "+
-																"strangers? "+d.strangers+" "+
-																"html/css? "+d.htmlcss+" "+
-																"javascript? "+d.javascript+" "+
-																"familiarity with python "+d.python+" "+
-																"familiarity with r "+d.r+" "+
-																"familiarity with d3 "+d.d3+" "+
-																"familiarity with processing "+d.processing)
-													//.html(d3.event.pageX + "<br> line");
+
+													/*Attempt at looping function START
+
+													//this function gives the error below;
+													//TypeError: Cannot read property '0' of undefined d3
+
+													.text(function(d,i){
+														return d[i]
+													})
+													Attempt at loop END*/
+
+													//very ugly way to complete the assignment below...
+													.html(function(){ //d is already passed in line 150
+														console.log(d) //log to see what data is binded
+														var text = "" //empty string to hold the string
+														for (var j in d){  //loop within d with j (why j in this case but not i?)
+															text = text + j + ": " + d[j] + "<br>"
+														}
+														return text
+													})
 
 
-													/*funny result
+																/*("belongs to "+d.school+" <br>"+
+																"born on "+d.birthmonth+" <br>"+
+																"prefers "+d.coffeeTea+" <br>"+
+																"command line? "+d.commandLine+" <br>"+
+																"bikes? "+d.bikes+" <br>"+
+																"git? "+d.git+" <br>"+
+																"cats? "+d.cats+" <br>"+
+																"strangers? "+d.strangers+" <br>"+
+																"html/css? "+d.htmlcss+" <br>"+
+																"javascript? "+d.javascript+" <br>"+
+																"python? "+d.python+" <br>"+
+																"r? "+d.r+" <br>"+
+																"d3? "+d.d3+" <br>"+
+																"processing? "+d.processing)*/
+
+													/*
+													funny result
 													.append("text")
 														.text("belongs to "+d.school)
 													.append("text")
 														.text("born on "+d.birthmonth)
-													funny result END */
-
-													//.text(function(d,i){
-													//	return d.[i]
-													//})
-
-													//.text(d.birthmonth)
-													//.text(d.coffeeTea)
-													//.text(d.commandLine)
-													//.text(d.bikes)
-													//.text(d.coffeeTea)
-
-												//Timestamp,school,commute,birthmonth,coffeeTea,commandLine,bikes,git,cats,strangers,htmlcss,javascript,python,r,d3,processing
+													funny result END
+													*/
 
 												//Show the tooltip
 												d3.select("#tooltip").classed("hidden", false);
@@ -231,7 +241,7 @@
 
                     var ascending = true
 
-                  var button = d3.select("#button1")
+                  	var button = d3.select("#button1")
                             .on("click",function(){
                                 sortBars()
 
