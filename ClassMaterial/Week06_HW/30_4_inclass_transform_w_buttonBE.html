@@ -75,9 +75,9 @@
 
                 var xScale = d3.scaleBand().domain(["brooklyn","manhattan","bronx","queens","staten_island"]).range([0,w])
                 var xAxis = d3.axisBottom()
-                    .scale(xScale)
-                svg.append("g")
-    				.attr("class", "axis")
+                    					.scale(xScale)
+                 svg.append("g")
+    								.attr("class", "axis")
                     .attr("transform", "translate("+padding+"," + (h) + ")")
                     .call(xAxis);
                 var yScale = d3.scaleLinear().domain([0,90]).range([h,0])
@@ -85,8 +85,8 @@
                     .scale(yScale)
                 svg.append("g")
                     .attr("class", "axis")
-    				.attr("transform", "translate("+padding+",0)")
-    				.call(yAxis);
+    								.attr("transform", "translate("+padding+",0)")
+    								.call(yAxis);
                 svg.selectAll("circle")
                     .data(data)
                     .enter()
