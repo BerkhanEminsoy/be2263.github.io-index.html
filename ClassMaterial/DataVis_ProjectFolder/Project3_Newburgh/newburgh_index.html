@@ -23,6 +23,7 @@
          font-family: mr-eaves-xl-modern,sans-serif;
          font-weight: 300;
          font-style: normal;
+         width:100%;
        }
 
   #map { position:absolute;
@@ -51,12 +52,13 @@
   <!-- START MapBox Map -->
   <div id='map'></div>
   <script>
+
       mapboxgl.accessToken = 'pk.eyJ1Ijoic2xlN2VuIiwiYSI6ImNqdHU0ZTM2NTFpazY0M20ya3B1aWRlNGwifQ.CWoYi8qNg9jIIkdbSTQ_Qg';
       const map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/sle7en/cju4xglos0b0j1fqegaz4kde9',
-        center: [-74.008114, 41.498563],
-        zoom: 14.4
+        style: 'mapbox://styles/sle7en/cjuo5xbyhb9aj1fn087jfcwi0',
+        center: [-74.024, 41.505],
+        zoom: 13.5
       });
 
 
