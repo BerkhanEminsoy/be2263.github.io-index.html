@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <title>basic located</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+
+
+<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+</div>
+		<script type="text/javascript">
+
+        d3.csv("transform_dataset.csv")
+        .then(function(data){
+            pieChart(data,"c1")
+        })
+
+
+    function pieChart(data,column){
+            //basic svg setup
+            var w = 500
+            var h = 500
+            var inner = 0     //pie has no inner radius
+            var outer = 200
+
+            var svg = d3.select("body").append("svg").attr("width",w).attr("height",h)
+           //we don't need scales because it is always going to be percents.
+
+        //define the pie layout this is just to use to make data into percents
+        var pie = d3.pie();
+        //define the arc
+        var arc = d3.arc().innerRadius(inner).outerRadius(outer)
+
+        var array = []        //here we have to format the column as an array of values so that pie can give use the right percent angle
+        for(var d in data){   //just looping through and putting every value in that column into the array
+            array.push(data[d][column])
+        }
+        // draw
+        var arcs = svg.selectAll("g.arc")
+        			  .data(pie(array))//this is the data, try console logging it to see pie in action
+        			  .enter()
+        			  .append("g")
+        			  .attr("class", "arc")
+                .attr("transform", "translate(" + outer+ "," + outer + ")");//we have to shift the whole thing to the right and down
+
+        //Draw arc paths
+        var colors = ["#68b859","#cbcf49","#6c7c3f","#7fdf4a","#c2d199"]//if we want pie slices to be different colors
+
+        arcs.append("path")
+            .attr("fill", function(d, i) {
+            	return colors[i];//we have to do different colors, so use the index to access a list of color
+            })
+            .attr("d", arc);
+    }
+
+</script>
+</body>
+</html>

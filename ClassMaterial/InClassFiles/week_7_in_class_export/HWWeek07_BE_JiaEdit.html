@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>svg tooltip</title><!-- make your own with https://www.favicon.cc/-->
+        <!-- <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" /> -->
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<style type="text/css">
+
+            body{font-family:helvetica;}
+
+            #button1{border:2px solid #000; border-radius:5px;padding:5px;width:100px;}
+
+            #chart1{padding:10px;}
+
+						#tooltip {
+							position: absolute;
+							width: 200px;
+							height: auto;
+							padding: 10px;
+							background-color: white;
+							-webkit-border-radius: 10px;
+							-moz-border-radius: 10px;
+							border-radius: 10px;
+							-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+							-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+							box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+							pointer-events: none;
+						}
+
+						#tooltip.hidden {
+							display: none;
+						}
+
+						#tooltip p {
+							margin: 0;
+							font-family: sans-serif;
+							font-size: 16px;
+							line-height: 20px;
+						}
+
+						#moreInfo {
+							position: absolute;
+							width: 200px;
+							height: auto;
+							stroke: red;
+							padding: 10px;
+							background-color: white;
+							-webkit-border-radius: 10px;
+							-moz-border-radius: 10px;
+							border-radius: 10px;
+							-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+							-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+							box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+							pointer-events: none;
+						}
+
+						#moreInfo.hidden {
+							display: none;
+						}
+
+						#moreInfo p {
+							margin: 0;
+							font-family: sans-serif;
+							font-size: 16px;
+							line-height: 20px;
+						}
+
+		</style>
+	</head>
+
+    <div id="button1">SORT</div>
+
+    <div id="chart1"></div>
+
+    <div id="moreInfo" class = "hidden">
+			<p><strong>More Info!</strong></p>
+			<p><span id="info"></span></p>
+		</div>
+
+		<div id="tooltip" class = "hidden">
+			<p><strong>Commute Time</strong></p>
+			<!-- <p><span id="value">100</span>%</p> --> <!--how does this work as in percentages?-->
+			<p><span id="value">100</span> min</p>
+		</div>
+
+	<body>
+	<!-- <script type="text/javascript">
+            //The code below builds on the last file and adds a svg tooltip
+            //look for several blocks with NEW CODE HERE comments to see what's different from previous file
+
+            /*TODO:
+            The book describes 3 ways of making tooltips.
+            the first the the browser's default, which we will not be using.
+            the second is the svg method, which has been implemented below
+
+            YOUR HOMEWORK IS:
+            part 1: there is a third method using divs and html, please implment this third method for your homework
+            HINT: the code will start on Page 211, it is in 3 simple steps:
+                1.make div for the tooltip, page 212
+                2.in the mouseover section where the svg tooltip was implemented, change acoordingly page 213
+                3. do the same for the mouseout section
+                4. use CSS to style the tooltip - this is on page 212
+
+            part 2:use the moreInfo div(above in the html) to display the rest of the columns of data in that div for each bar you rollover
+
+            HINT:
+            1.select the div moreInfo, set its html with the content
+            2.to make the content - you will have to access each column by calling d["the column name you need"]
+                you may have to make the values into sentences using + sign
+            3. style your css
+
+            END OF HOMEWORK
+            */
+            d3.csv("inClassSurveyData.csv")
+            .then(function(data){
+                drawChart(data)
+            })
+            .catch(function(error){ console.log("error")})
+
+            function drawChart(data, column){
+                var w = 700
+                var h = 300
+                var yScale = d3.scaleLinear().domain([0,90]).range([0,h])
+                var xScale = d3.scaleBand().domain(d3.range(data.length)).range([0,w]).round(true).paddingInner(.1)
+                var cScale = d3.scaleLinear().domain([0,90]).range(["#aaa","#000"])
+                var svg = d3.select("#chart1")
+                            .append("svg")
+                            .attr("width",w)
+                            .attr("height",h)
+                svg.selectAll("rect")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("x",function(d,i){
+                        return xScale(i)
+                    })
+                    .attr("y",function(d){
+                        return h-yScale(d.commute)
+                    })
+                    .attr("width",xScale.bandwidth())
+                    .attr("height",function(d){
+                        return yScale(d.commute)
+                    })
+                    .attr("fill",function(d){
+                        return cScale(d.commute)
+                    })
+                    .attr("opacity",.5)
+                    //START NEW CODE HERE
+                    .on("mouseover",function(d){
+                        /*this time we are using (this) to get the position of the bar so we know where to put the tooltip
+                        we will make 2 variables, for the x and y of the bar
+                        */
+                        var tx = parseFloat(d3.select(this).attr("x"))/*tx for tooltip's x,
+                        we also make sure it is a number by calling parseFloat on the whole thing*/
+                        var ty = parseFloat(d3.select(this).attr("y"))//ty for tooltip's y
+
+												//Update the tooltip position and value
+												d3.select("#tooltip")
+													.style("left", tx + "px")
+													.style("top", ty + "px")
+													.select("#value")
+													.text(d.commute);
+
+												d3.select("#moreInfo")
+													.style("left", tx + "px")
+													.style("top", ty + 65 + "px")
+													.select("#info")
+
+													//Attempt at looping function START
+
+													//this function gives the error below;
+													//TypeError: Cannot read property '0' of undefined d3
+
+													.html(function(){//the d is already passed in on line 150
+                               // console.log(d)//uncomment this console log statement to see what is the data at this stage
+                                var text = ""//make a empty string to hold the text
+                                //make your loop within d
+                                for (var j in d){
+                                    text+= j+": "+d[j]+"<br>"
+                                }
+														return text
+													})
+													//Attempt at loop END
+
+													//very ugly way to complete the assignment below...
+//													.html("belongs to "+d.school+" <br>"+
+//																"born on "+d.birthmonth+" <br>"+
+//																"prefers "+d.coffeeTea+" <br>"+
+//																"command line? "+d.commandLine+" <br>"+
+//																"bikes? "+d.bikes+" <br>"+
+//																"git? "+d.git+" <br>"+
+//																"cats? "+d.cats+" <br>"+
+//																"strangers? "+d.strangers+" <br>"+
+//																"html/css? "+d.htmlcss+" <br>"+
+//																"javascript? "+d.javascript+" <br>"+
+//																"python? "+d.python+" <br>"+
+//																"r? "+d.r+" <br>"+
+//																"d3? "+d.d3+" <br>"+
+//																"processing? "+d.processing)
+//
+													/*
+													funny result
+													.append("text")
+														.text("belongs to "+d.school)
+													.append("text")
+														.text("born on "+d.birthmonth)
+													funny result END
+													*/
+
+												//Show the tooltip
+												d3.select("#tooltip").classed("hidden", false);
+												d3.select("#moreInfo").classed("hidden", false);
+
+                        //below we will add the text
+                        svg.append("text")
+                            .text(d.commute)//the text content is the actual number of the commute
+                            .attr("x",tx)
+                            .attr("y",ty)
+                            .attr("class","tooltip")//give it a class so we can select it later
+
+												//add the moreInfo div
+												svg.append("text")
+														.text(d.commute)//the text content is the actual number of the commute
+														.attr("x",tx)
+														.attr("y",ty)
+														.attr("class","moreInfo")//give it a class so we can select it later
+										})
+
+                    .on("mouseout",function(d){
+                        d3.selectAll(".tooltip")//select everything that has the class tooltip, in our case just the text we appended
+                        	.remove()//remove it
+												d3.selectAll(".moreInfo")//select everything that has the class moreInfo, in our case just the text we appended
+	                      	.remove()//remove it
+                    })
+                    //END NEW CODE HERE
+
+                    var ascending = true
+
+                  	var button = d3.select("#button1")
+                            .on("click",function(){
+                                sortBars()
+
+                                if(ascending ==true){
+                                    ascending = false
+                                    d3.select("#button1").html("click to sort ascending")
+                                }else{
+                                    ascending = true
+                                    d3.select("#button1").html("click to sort descending")
+                                }
+                            })
+
+                    function sortBars(){
+                      d3.selectAll("rect")
+                        .sort(function(a,b){
+                            if(ascending == true){
+                                return d3.descending(parseInt(a.commute),parseInt(b.commute))
+                            }else{
+                                return d3.ascending(parseInt(a.commute),parseInt(b.commute))
+                            }
+                        })
+                        .transition()
+                        .duration(1000)
+                        .delay(function(d,i){
+                            return i*100
+                        })
+                        .attr("x",function(d,i){
+                            return xScale(i)
+                        })
+                    }
+
+            }
+
+        </script> -->
+	</body>
+</html>

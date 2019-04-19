@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3: A simple bar chart</title>
+		<script type="text/javascript" src="../d3.js"></script>
+		<style type="text/css">
+			/* No style rules here yet */
+		</style>
+	</head>
+	<body>
+		<p>Click to update the data, as many times u like<p>
+		<script type="text/javascript">
+
+			//Width and height
+			var w = 600;
+			var h = 250;
+			var barPadding = 1;
+
+			var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+							11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+			var xScale = d3.scaleBand()
+										 .domain(d3.range(dataset.length))
+										 .rangeRound([0,w])
+										 .paddingInner(0.05);
+
+			var yScale = d3.scaleLinear()
+										 .domain([0,d3.max(dataset)])
+										 .rangeRound([0,h]); //rangeRound rounds values to the nearest pixel for sharper rendering
+
+			svg.selectAll("rect")
+			   .data(dataset)
+			   .enter()
+			   .append("rect")
+			   .attr("x", function(d, i) {
+			   		return xScale(i);
+			   })
+			   .attr("y", function(d) {
+			   		return h - yScale(d);
+			   })
+			   .attr("width", xScale.bandwidth())
+			   .attr("height", function(d) {
+			   		return yScale(d);
+			   })
+			   .attr("fill", function(d) {
+					return "rgb(0, 0, " + Math.round(d * 10) + ")";
+			   });
+
+
+			svg.selectAll("text")
+			   .data(dataset)
+			   .enter()
+			   .append("text")
+			   .text(function(d) {
+			   		return d;
+			   })
+			   .attr("text-anchor", "middle")
+			   .attr("x", function(d, i) {
+			   		return xScale(i) + xScale.bandwidth() / 2;
+			   })
+			   .attr("y", function(d) {
+			   		return h - yScale(d)+ 14;
+			   })
+			   .attr("font-family", "sans-serif")
+			   .attr("font-size", "11px")
+			   .attr("fill", "white");
+
+			d3.select("p")
+				.on("click",function() {
+
+					//remove one value from dataset or literally shift with 'pop'
+					dataset.pop();
+
+					//New Values for dataset
+					//var numValues = dataset.length; //Count original length of dataset
+					var maxValue = 100; //set maxValue to 100
+
+
+					//dataset = []; //Initialize empty array
+					//for (var i = 0; i < numValues; i++) { //loop numValues times
+					var newNumber = Math.floor(Math.random() * maxValue); //New random integer (0-100)
+					//dataset.push(newNumber); //Add new number to array
+
+					xScale.domain(d3.range(dataset.length)); //recalibrate x scale domain, given the new length of dataset
+		 			yScale.domain([0, d3.max(dataset)]); //recalibrate y scale domain, given the new max value of te dataset
+
+		 			//select ...
+		 			var bars = svg.selectAll("rect") //select all bars
+		 				.data(dataset); //re-bind data to existing bars, return the 'update' selection
+		 				//'bars' is now the updated selection
+
+			 			//Enter...
+			 			bars.enter()			//References the enter selection (a subset of the update selection)
+								.append("rect")		//Creates a new rect
+								.attr("x",w)			//Sets the initial x position of the rect beyond the far right edge of the SVG
+								.attr("y", function(d) {		//Sets the y value, based on the updated yScale
+									return h - yScale(d);
+								})
+								.attr("width", xScale.bandwidth())		//Sets the width value, based on the updated xScale
+								.attr("height", function(d) {			//Sets the height value, based on the updated yScale
+									return yScale(d);
+								})
+								.attr("fill",function(d){			//Sets the fill value
+									return "rgb(0,0," + Math.round(d * 10) + ")";
+								})
+								.merge(bars)			//merges the enter selection with the update Selection
+								.transition()			//Initiate a transition on all elements in the update selection (all rects)
+								.duration(500)
+								.attr("x", function (d, i) {		//Set new x position, based on the updated xScale
+									return xScale(i);
+								})
+								.attr("y", function (d){		//Set new y position, based on the updated yScale
+									return h - yScale(d);
+								})
+								.attr("width", xScale.bandwidth())		//Set new width value, based on the updated xScale
+								.attr("height", function(d) {			//Set new height value, based on the updated yScale
+									return yScale(d);
+								});
+
+						//Exit...(remove value)
+						bars.exit()						//references the exit selection (a subset of the update selection)
+								.transition()			//Initiates a transition on the one element we're deleting
+								.duration(500)
+								.attr("x",w)			//Move past the right edge of the SVG
+								.remove();				//Deletes this element from the DOM once transition is complete
+
+
+						/*
+						//Update all rects
+						svg.selectAll("rect")
+							 .data(dataset)
+							 .transition()
+							 .delay(function(d, i) {
+								 return i / dataset.length * 1000;
+							 })
+							 .duration(500) //duration must always be set after transition and they are alwasys in miliseconds
+							 //default easing is CubicInOut .ease(d3.easeElasticOut)
+							 .attr("y", function(d) {
+								 return h - yScale (d);
+							 })
+							 .attr("height", function(d) {
+								 return yScale(d);
+							 })
+							 .attr("fill", function(d) {
+		 	 				   return "rgb(0, 0, " + Math.round(d * 10) + ")";
+						   });
+						*/
+
+
+						svg.selectAll("text")
+							 .data(dataset)
+							 .transition()
+							 .delay(function(d, i) {
+								 return i / dataset.length * 1000;
+							 })
+							 .duration(500)
+							 //.ease(d3.easeElasticOut)
+							 .text(function(d) {
+								 return d;
+							 })
+							 .attr("x",function(d,i) {
+								 return xScale(i) + xScale.bandwidth() / 2;
+							 })
+							 .attr("y",function(d){
+								 return h - yScale(d) + 14;
+							 });
+					});
+
+					//durations of 150 ms are good for hovering over stuff
+
+					/*Transitions can only operate on values that already exist; if you initiate
+a transition on a value that doesn’t exist yet, you’ll get some
+unexpected and undesirable behavior.
+For example, let’s say you wanted to dial down the opacity of the
+rectangles in the prior example. You could call something like
+svg.selectAll("rect").transition().attr("opacity", 0).
+That will make them transparent (0% opaque), but it will happen
+instantly, not smoothly, over time. If you first set
+attr("opacity", 1), then the transition will have what it needs to
+work as expected: a starting value (1) and an ending value (0).
+Make sure to always set an initial value before attempting to transition
+to a new value.*/
+
+					/*ease() must also be specified after transition(), but before the attr() statements
+to which the transition applies. ease() can come before or after duration(), but this
+sequence makes the most sense to me:
+… //Selection statement(s)
+.transition()
+.duration(2000)
+.ease(d3.easeLinear)
+… //attr() statements*/
+
+
+		</script>
+	</body>
+</html>

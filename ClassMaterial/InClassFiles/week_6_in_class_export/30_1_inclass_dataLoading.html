@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>data manipulation</title>
+        <!-- make your own with https://www.favicon.cc/-->
+        <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <!-- we are loading v5 of d3 directly from the source-->
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<style type="text/css">
+		</style>
+	</head>
+    <div id="chart1"></div>
+	<body>
+		<script type="text/javascript">
+            //this is the new procedure to load data, will work on v4 and v5
+            d3.csv("inClassSurveyData.csv")//call d3.csv as before, put the path to your dataset in quotationmarks
+            //use .then(), which means if csv is loaded, then do whats in the ()
+                .then(function(data){//place a function passing in the data within .then()
+                    
+                    drawChart(data)//call any functions that will use the data here. drawing, processing, etc.
+                })
+                .catch(function(error){ //this line below will print to console if there is an error.
+                    console.log("handles errors, not neccessary, but keep in good practice")
+                })
+			
+            
+            
+            function drawChart(data){	 //this is the declaration of the function here
+                console.log(data)//just printing data to console to show that it is loaded
+            }
+            
+		</script>
+	</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>sort update</title><!-- make your own with https://www.favicon.cc/-->
+        <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<style type="text/css">
+            body{font-family:helvetica;}
+            #button1{border:2px solid #000; border-radius:5px;padding:5px;width:100px;}
+            #chart1{padding:10px;}
+		</style>
+	</head>
+    <div id="button1">SORT</div>
+    <div id="chart1"></div>
+	<body>
+		<script type="text/javascript"> 
+            //The code below adds a sort button
+            //sorts the data by the commute column
+            //then transforms the height of each bar so that the bars are sorted
+            
+            //added a button above for sorting
+            d3.csv("inClassSurveyData.csv")
+            .then(function(data){
+                drawChart(data)                
+            })
+            .catch(function(error){ console.log("error")})
+            
+            //this is a sorting function, it takes data in, and return it sorted by the commute value
+            function sortDataByCommute(data){
+                data.sort(function(a,b){//data.sort takes a comparator, in this case a and b represent 2 of the values in your dataset
+                    return a.commute - b.commute//this is how we compare the values in the commute column
+                })
+                return data // now this data is sorted and gets returned
+            }
+            
+            //this function with drawing code a basic bargraph.
+            function drawChart(data){	 
+                var w = 700
+                var h = 300
+                var yScale = d3.scaleLinear().domain([0,90]).range([0,h])
+                var xScale = d3.scaleBand().domain(d3.range(data.length)).range([0,w]).round(true).paddingInner(.1)
+                var cScale = d3.scaleLinear().domain([0,90]).range(["#aaa","#000"])
+                var svg = d3.select("#chart1")
+                            .append("svg")
+                            .attr("width",w*2)
+                            .attr("height",h*2)
+                svg.selectAll("rect")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("x",function(d,i){
+                        return xScale(i)
+                    })
+                    .attr("y",function(d){
+                        return h-yScale(d.commute)
+                    })
+                    .attr("width",xScale.bandwidth())
+                    .attr("height",function(d){
+                        return yScale(d.commute)
+                    })
+                    .attr("fill",function(d){
+                        return cScale(d.commute)
+                    })
+                    
+                    // we call the sort data function here, so this variable, sortedData is data that is already sorted by commute
+                var sortedData = sortDataByCommute(data)                        
+                   
+                  var button = d3.select("#button1")//select the button and attach the click event listener
+                                .on("click",function(){  
+                                    //below happens when clicked
+                                      d3.selectAll("rect")
+                                        .data(sortedData)//attaching the sorted data
+                                        .transition()
+                                        .duration(1000)
+                                        .delay(function(d,i){
+                                            return i*200
+                                        })
+                                        .attr("y",function(d){
+                                            return h-yScale(d.commute)
+                                        })
+                                        .attr("height",function(d){
+                                            return yScale(d.commute)
+                                        })
+                                        .attr("fill",function(d){
+                                            return cScale(d.commute)
+                                        })
+                            })
+            }
+            
+        
+        
+        </script>
+	</body>
+</html>

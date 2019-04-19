@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>data manipulation</title><!-- make your own with https://www.favicon.cc/-->
+        <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<style type="text/css">
+            body{font-family:helvetica;}
+            #button1{border:2px solid #000; border-radius:5px;padding:5px;width:100px;}
+            #chart1{padding:10px;}
+		</style>
+	</head>
+    <div id="chart1"></div>
+	<body>
+		<script type="text/javascript">
+            //this code allows us to draw a simple chart with our data and also label it with 2 axis.
+            //1 axis is ordinal
+            d3.csv("transform_dataset.csv")
+            .then(function(data){
+                drawChart(data)
+            })
+            .catch(function(error){ console.log("error")})
+
+            //below is the code for drawing a basic chart, it takes in the data, and the selection of a column
+            function drawChart(data){
+                var w = 300
+                var h = 300
+                var padding = 20
+
+                //our svg
+                var svg = d3.select("#chart1")
+                            .append("svg")
+                            .attr("width",w+padding*2)
+                            .attr("height",h+padding*2)
+
+                //the x scale below is a ordinal scale similar to the book page 150 on
+                var xScale = d3.scaleBand().domain(["brooklyn","manhattan","bronx","queens","staten_island"]).range([0,w])
+                //the axis we have uses the x scale -the nominal one.
+                var xAxis = d3.axisBottom()
+                    .scale(xScale)
+                //we add the axis to the svg. first by
+                svg.append("g")//appending "g" meaning group - it is used to group elements together, like the axis(line, ticks, labels)
+    				.attr("class", "axis")//we give it a class so that it can be styled, and also it can be selected later for updates
+    				//below: the axis is always drawn in the upper left, we want to draw it across the bottom
+                    //so here we are moving the axis by translating it with x and y values, like this: translate(x,y)
+                    .attr("transform", "translate("+padding+"," + (h) + ")")
+                    .call(xAxis);//now we finally actually call the axis
+
+                // the y scale is numerical, we use it in the y axis
+                //but we call it the same way as x
+                var yScale = d3.scaleLinear().domain([0,90]).range([h,0])
+                var yAxis = d3.axisLeft()
+                    .scale(yScale)
+                svg.append("g")
+                    .attr("class", "axis")
+    				.attr("transform", "translate("+padding+",0)")
+    				.call(yAxis);
+
+                //you have seen this before.
+                svg.selectAll("circle")
+                    .data(data)
+                    .enter()
+                    .append("circle")
+                    .attr("cy",function(d){
+                        return yScale(d["c1"])
+                    })
+                    .attr("cx",function(d,i){
+                        return xScale(d.borough)+padding*3
+                    })
+                    .attr("r",5)
+
+                //label is the same as before from week 4
+                svg.selectAll(".label")
+                    .data(data)
+                    .enter()
+                    .append("text")
+                    .attr("class","label")
+                    .text(function(d){
+                        return d["c1"]})
+                    .attr("y",function(d){
+                        return yScale(d["c1"])-10
+                    })
+                    .attr("x",function(d,i){
+                        return xScale(d.borough)+padding*3
+                    })
+                }
+		</script>
+	</body>
+</html>

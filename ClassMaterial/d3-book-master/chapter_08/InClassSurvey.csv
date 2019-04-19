@@ -1,0 +1,39 @@
+Timestamp,Select the school you are enrolled in:,Enter the number of minutes it took you to get to school today:,Select the month in which you were born:,"coffee, tea, both, or neither",Select your comfort level with: [the command line],Select your comfort level with: [riding bikes],Select your comfort level with: [git],Select your comfort level with: [cats],Select your comfort level with: [talking to strangers],Select how often do you use the following: [HTML/CSS],Select how often do you use the following: [Javascript],Select how often do you use the following: [Python],Select how often do you use the following: [R],Select how often do you use the following: [D3],Select how often do you use the following: [Processing]
+2/1/2019 8:29:43,GSAPP,45,02 February,both,5 very comfortable,1,4,1,0 not at all,daily,daily,daily,occasionally,daily,occasionally
+2/1/2019 8:37:45,none,10,12 December,tea,1,4,0 not at all,4,4,never,never,never,never,never,never
+2/1/2019 8:39:01,GSAPP,20,03 March,both,2,2,2,2,2,weekly,weekly,weekly,weekly,weekly,weekly
+2/1/2019 9:58:19,GSAS,11,07 July,coffee,1,5 very comfortable,4,5 very comfortable,3,have at least once,have at least once,weekly,daily,never,never
+2/1/2019 9:58:42,GSAPP,17,04 April,both,2,4,0 not at all,4,2,have at least once,never,never,have at least once,never,never
+2/1/2019 9:58:45,GSAPP,25,05 May,neither,4,5 very comfortable,2,1,,occasionally,weekly,weekly,never,never,occasionally
+2/1/2019 9:58:46,Mailman School of Public Health,40,09 September,coffee,0 not at all,5 very comfortable,0 not at all,5 very comfortable,4,never,never,never,weekly,never,never
+2/1/2019 9:58:56,GSAPP,10,04 April,tea,2,0 not at all,2,5 very comfortable,2,have at least once,never,never,never,never,never
+2/1/2019 9:58:57,GSAPP,10,01 January,tea,0 not at all,5 very comfortable,1,4,3,never,never,never,have at least once,never,never
+2/1/2019 9:59:08,GSAPP,60,02 February,both,0 not at all,2,0 not at all,0 not at all,0 not at all,never,never,never,never,never,have at least once
+2/1/2019 9:59:10,GSAPP,10,06 June,both,4,3,5 very comfortable,5 very comfortable,2,have at least once,have at least once,have at least once,never,never,never
+2/1/2019 9:59:24,Columbia College,60,06 June,tea,5 very comfortable,5 very comfortable,5 very comfortable,5 very comfortable,4,weekly,weekly,occasionally,never,occasionally,never
+2/1/2019 9:59:24,Journalism School,25,02 February,neither,4,4,3,1,2,weekly,weekly,weekly,weekly,weekly,weekly
+2/1/2019 9:59:25,GSAPP,10,06 June,neither,4,3,3,3,3,weekly,weekly,have at least once,have at least once,weekly,have at least once
+2/1/2019 9:59:25,Columbia College,15,09 September,coffee,3,4,4,0 not at all,3,never,have at least once,have at least once,never,never,never
+2/1/2019 9:59:31,GSAPP,10,04 April,coffee,2,5 very comfortable,2,5 very comfortable,3,have at least once,have at least once,occasionally,never,never,occasionally
+2/1/2019 9:59:32,GSAPP,15,01 January,both,4,5 very comfortable,4,5 very comfortable,2,never,have at least once,never,never,never,never
+2/1/2019 9:59:33,GSAPP,15,01 January,both,2,5 very comfortable,2,3,3,have at least once,never,have at least once,never,never,never
+2/1/2019 9:59:43,GSAPP,3,02 February,both,3,4,0 not at all,5 very comfortable,2,have at least once,never,never,never,never,never
+2/1/2019 9:59:43,GSAPP,5,03 March,both,3,5 very comfortable,2,5 very comfortable,1,have at least once,have at least once,occasionally,never,never,occasionally
+2/1/2019 9:59:53,GSAPP,15,12 December,tea,1,5 very comfortable,1,2,2,have at least once,have at least once,occasionally,have at least once,have at least once,never
+2/1/2019 10:00:10,Columbia College,15,04 April,both,3,3,3,3,3,never,never,never,never,never,never
+2/1/2019 10:00:24,Columbia College,60,05 May,coffee,1,5 very comfortable,1,5 very comfortable,1,never,never,never,never,never,never
+2/1/2019 10:00:25,GSAPP,10,10 October,tea,3,0 not at all,0 not at all,0 not at all,2,have at least once,never,never,never,never,never
+2/1/2019 10:00:30,Columbia College,15,04 April,both,3,3,3,3,3,never,never,never,never,never,never
+2/1/2019 10:00:38,Columbia College,12,11 November,tea,1,3,1,3,4,never,never,never,never,never,never
+2/1/2019 10:00:48,GSAPP,5,06 June,tea,,5 very comfortable,4,3,1,never,never,have at least once,never,never,have at least once
+2/1/2019 10:00:49,Engineering,15,12 December,both,0 not at all,4,0 not at all,3,5 very comfortable,never,never,never,never,never,never
+2/1/2019 10:00:51,Columbia College,10,02 February,both,1,5 very comfortable,1,4,4,have at least once,have at least once,have at least once,never,never,never
+2/1/2019 10:01:00,GSAPP,15,06 June,tea,3,5 very comfortable,1,3,1,have at least once,occasionally,weekly,never,never,weekly
+2/1/2019 10:01:28,GSAPP,10,01 January,both,2,5 very comfortable,0 not at all,2,3,have at least once,have at least once,have at least once,never,never,occasionally
+2/1/2019 10:01:58,Teachers College,90,06 June,coffee,3,5 very comfortable,3,3,1,never,have at least once,have at least once,weekly,never,have at least once
+2/1/2019 10:02:58,GSAPP,15,05 May,both,4,1,2,3,1,occasionally,never,never,never,never,never
+2/1/2019 10:03:19,GSAPP,15,01 January,coffee,4,4,4,5 very comfortable,0 not at all,never,never,never,never,never,never
+2/1/2019 10:03:23,GSAPP,15,12 December,neither,3,5 very comfortable,5 very comfortable,5 very comfortable,1,have at least once,have at least once,occasionally,never,never,occasionally
+2/1/2019 10:03:41,GSAPP,15,05 May,tea,4,4,3,3,2,occasionally,never,never,never,never,never
+2/1/2019 10:05:03,GSAPP,20,10 October,both,1,4,2,5 very comfortable,2,daily,occasionally,have at least once,never,never,never
+2/1/2019 10:06:40,GSAPP,10,12 December,tea,2,4,1,1,1,have at least once,have at least once,have at least once,have at least once,have at least once,have at least once

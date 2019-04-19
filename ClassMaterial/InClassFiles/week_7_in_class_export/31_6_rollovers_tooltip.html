@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>svg tooltip</title><!-- make your own with https://www.favicon.cc/-->
+        <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<style type="text/css">
+            body{font-family:helvetica;}
+            #button1{border:2px solid #000; border-radius:5px;padding:5px;width:100px;}
+            #chart1{padding:10px;}
+		</style>
+	</head>
+    <div id="button1">SORT</div>
+    <div id="chart1"></div>
+    <div id="moreInfo"></div>
+	<body>
+		<script type="text/javascript"> 
+            //The code below builds on the last file and adds a svg tooltip
+            //look for several blocks with NEW CODE HERE comments to see what's different from previous file
+            
+            /*TODO:
+            The book describes 3 ways of making tooltips.
+            the first the the browser's default, which we will not be using.
+            the second is the svg method, which has been implemented below
+            
+            YOUR HOMEWORK IS:
+            part 1: there is a third method using divs and html, please implment this third method for your homework
+            HINT: the code will start on Page 211, it is in 3 simple steps: 
+                1.make div for the tooltip, page 212
+                2.in the mouseover section where the svg tooltip was implemented, change acoordingly page 213
+                3. do the same for the mouseout section
+                4. use CSS to style the tooltip - this is on page 212
+            
+            part 2:use the moreInfo div(above in the html) to display the rest of the columns of data in that div for each bar you rollover
+            
+            HINT:
+            1.select the div moreInfo, set its html with the content
+            2.to make the content - you will have to access each column by calling d["the column name you need"] 
+                you may have to make the values into sentences using + sign
+            3. style your css
+            
+            END OF HOMEWORK
+            */
+            d3.csv("inClassSurveyData.csv")
+            .then(function(data){
+                drawChart(data)                
+            })
+            .catch(function(error){ console.log("error")})
+            
+            function drawChart(data){	 
+                var w = 700
+                var h = 300
+                var yScale = d3.scaleLinear().domain([0,90]).range([0,h])
+                var xScale = d3.scaleBand().domain(d3.range(data.length)).range([0,w]).round(true).paddingInner(.1)
+                var cScale = d3.scaleLinear().domain([0,90]).range(["#aaa","#000"])
+                var svg = d3.select("#chart1")
+                            .append("svg")
+                            .attr("width",w)
+                            .attr("height",h)
+                svg.selectAll("rect")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("x",function(d,i){
+                        return xScale(i)
+                    })
+                    .attr("y",function(d){
+                        return h-yScale(d.commute)
+                    })
+                    .attr("width",xScale.bandwidth())
+                    .attr("height",function(d){
+                        return yScale(d.commute)
+                    })
+                    .attr("fill",function(d){
+                        return cScale(d.commute)
+                    })
+                    .attr("opacity",.5)
+                    //START NEW CODE HERE
+                    .on("mouseover",function(d){
+                        /*this time we are using (this) to get the position of the bar so we know where to put the tooltip
+                        we will make 2 variables, for the x and y of the bar
+                        */
+                        var tx = parseFloat(d3.select(this).attr("x"))/*tx for tooltip's x, 
+                        we also make sure it is a number by calling parseFloat on the whole thing*/
+                        var ty = parseFloat(d3.select(this).attr("y"))//ty for tooltip's y
+                        
+                        //below we will add the text
+                        svg.append("text")
+                            .text(d.commute)//the text content is the actual number of the commute
+                            .attr("x",tx)
+                            .attr("y",ty)
+                            .attr("class","tooltip")//give it a class so we can select it later
+                    })
+                    .on("mouseout",function(d){
+                        d3.selectAll(".tooltip")//select everything that has the class tooltip, in our case just the text we appended
+                        .remove()//remove it
+                    })
+                    //END NEW CODE HERE
+                    
+                    var ascending = true
+                    
+                  var button = d3.select("#button1")
+                            .on("click",function(){  
+                                sortBars()
+                                
+                                if(ascending ==true){
+                                    ascending = false
+                                    d3.select("#button1").html("click to sort ascending")
+                                }else{
+                                    ascending = true
+                                    d3.select("#button1").html("click to sort descending")
+                                }
+                            })      
+                
+                    function sortBars(){
+                      d3.selectAll("rect")
+                        .sort(function(a,b){
+                            if(ascending == true){
+                                return d3.descending(parseInt(a.commute),parseInt(b.commute))
+                            }else{
+                                return d3.ascending(parseInt(a.commute),parseInt(b.commute))
+                            }
+                        })
+                        .transition()
+                        .duration(1000)
+                        .delay(function(d,i){
+                            return i*100
+                        })
+                        .attr("x",function(d,i){
+                            return xScale(i)
+                        })
+                    }
+            
+            }
+           
+        </script>
+	</body>
+</html>

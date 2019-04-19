@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>rollover opacity</title><!-- make your own with https://www.favicon.cc/-->
+        <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<style type="text/css">
+            body{font-family:helvetica;}
+            #button1{border:2px solid #000; border-radius:5px;padding:5px;width:100px;}
+            #chart1{padding:10px;}
+		</style>
+	</head>
+    <div id="button1">SORT</div>
+    <div id="chart1"></div>
+	<body>
+		<script type="text/javascript"> 
+            //The code below adds a simple rollover and out effect to the bars
+            //look for a START NEW CODE HERE comment to see what's different from previous file
+            d3.csv("inClassSurveyData.csv")
+            .then(function(data){
+                drawChart(data)                
+            })
+            .catch(function(error){ console.log("error")})
+            
+            function drawChart(data){	 
+                var w = 700
+                var h = 300
+                var yScale = d3.scaleLinear().domain([0,90]).range([0,h])
+                var xScale = d3.scaleBand().domain(d3.range(data.length)).range([0,w]).round(true).paddingInner(.1)
+                var cScale = d3.scaleLinear().domain([0,90]).range(["#aaa","#000"])
+                var svg = d3.select("#chart1")
+                            .append("svg")
+                            .attr("width",w)
+                            .attr("height",h)
+                svg.selectAll("rect")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("x",function(d,i){
+                        return xScale(i)
+                    })
+                    .attr("y",function(d){
+                        return h-yScale(d.commute)
+                    })
+                    .attr("width",xScale.bandwidth())
+                    .attr("height",function(d){
+                        return yScale(d.commute)
+                    })
+                    .attr("fill",function(d){
+                        return cScale(d.commute)
+                    })
+                    .attr("opacity",.5)
+                    //START NEW CODE HERE
+                    .on("mouseover",function(d){
+                        /*selecting this is a special javascript operation, 
+                        allowing you to select whatever is under the mouse
+                        in this case it is whichever rectangle under the mouse*/
+                        d3.select(this)
+                        .attr("opacity",1)//set the opacity of the current bar (this) to opaque
+                    })
+                    .on("mouseout",function(d){
+                        /*here we do it again, but return it to its original opacity*/
+                        d3.select(this)
+                        .attr("opacity",.5)
+                    })
+                    //END NEW CODE HERE
+                    
+                    var ascending = true
+                    
+                  var button = d3.select("#button1")
+                            .on("click",function(){  
+                                sortBars()
+                                
+                                if(ascending ==true){
+                                    ascending = false
+                                    d3.select("#button1").html("click to sort ascending")
+                                }else{
+                                    ascending = true
+                                    d3.select("#button1").html("click to sort descending")
+                                }
+                            })      
+                
+                    function sortBars(){
+                      d3.selectAll("rect")
+                        .sort(function(a,b){
+                            if(ascending == true){
+                                return d3.descending(parseInt(a.commute),parseInt(b.commute))
+                            }else{
+                                return d3.ascending(parseInt(a.commute),parseInt(b.commute))
+                            }
+                        })
+                        .transition()
+                        .duration(1000)
+                        .delay(function(d,i){
+                            return i*100
+                        })
+                        .attr("x",function(d,i){
+                            return xScale(i)
+                        })
+                    }
+            
+            }
+           
+        </script>
+	</body>
+</html>

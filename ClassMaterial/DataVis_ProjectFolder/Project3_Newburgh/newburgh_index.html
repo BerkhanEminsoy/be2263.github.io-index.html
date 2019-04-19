@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" /> -->
+  <title>Newburgh Tree Index</title>
+  <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+
+  <!-- START MapBox Supplement Code -->
+  <title>Display a map</title>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+  <!-- END MapBox Supplement Code -->
+
+  <!-- START CSS STYLE -->
+  <style>
+
+  body { margin:0px;
+         padding:20px;
+       }
+
+  #map { position:absolute;
+         top:50px;
+         bottom:20px;
+         width:100%;
+       }
+
+  </style>
+  <!-- END CSS STYLE -->
+
+</head>
+
+<body>
+  <div id="title">Newburgh Tree Index | by Newburghers - Get It!!!</div>
+
+  <!-- START MapBox Map -->
+  <div id='map'></div>
+  <script>
+      mapboxgl.accessToken = 'pk.eyJ1Ijoic2xlN2VuIiwiYSI6ImNqdHU0ZTM2NTFpazY0M20ya3B1aWRlNGwifQ.CWoYi8qNg9jIIkdbSTQ_Qg';
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/sle7en/cju4xglos0b0j1fqegaz4kde9',
+        center: [-74.008114, 41.498563],
+        zoom: 14.4
+      });
+  </script>
+  <!-- END MapBox Supplement Code -->
+
+  <div>
+	   <script type="text/javascript">
+
+     var width = window.innerWidth
+     var height = window.innerHeight
+
+     var TreeInventoryData = "Data/TreeInventoryUTM_Edit.csv"
+
+     Promise.all([d3.csv(TreeInventoryData)])
+            .catch(function(error){console.log("error! " + error.name + error.message)}) //error catching function I found online. Is this the proper way to uset this?
+            .then(function(data) {
+             var trees = data[0];
+             console.log(data[0], typeof data[0]);
+     });
+
+     </script>
+  </div>
+</body>
+</html>

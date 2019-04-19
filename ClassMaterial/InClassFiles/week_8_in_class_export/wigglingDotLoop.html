@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+path {
+  fill: #ccc;
+  stroke: #000;
+}
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+var width = 600,
+    height = 600;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+svg.append("circle")
+    .attr("cx",width/2)
+    .attr("cy",height/2)
+    .attr("r",20)
+
+  loop();
+
+
+var move = 100
+ 
+  function loop() {
+    d3.select("circle")
+        .transition()
+        .duration(1000)
+        .attr("r",23)
+        .attr("cx",width/2+Math.random()*move/2-move)
+        .attr("cy",height/2+Math.random()*move/2-move)
+        .transition()
+        .delay(1000)
+        .attr("r",19)
+        .attr("cx",width/2+Math.random()*move/2-move)
+        .attr("cy",height/2+Math.random()*move/2-move)
+        .transition()
+        .delay(1000)
+        .attr("r",20)
+        .each("end", loop);
+  }
+
+</script>

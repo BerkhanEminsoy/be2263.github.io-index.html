@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>sort up and down</title><!-- make your own with https://www.favicon.cc/-->
+        <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<style type="text/css">
+            body{font-family:helvetica;}
+            #button1{border:2px solid #000; border-radius:5px;padding:5px;width:100px;}
+            #chart1{padding:10px;}
+		</style>
+	</head>
+    <div id="button1">SORT</div>
+    <div id="chart1"></div>
+	<body>
+		<script type="text/javascript">
+            //The code below sorts ascending and descending using the same button
+
+            //added a button above for sorting
+            d3.csv("inClassSurveyData.csv")
+            .then(function(data){
+                drawChart(data)
+            })
+            .catch(function(error){ console.log("error")})
+
+            //same draw bar chart function as previous file
+            function drawChart(data){
+                var w = 700
+                var h = 300
+                var yScale = d3.scaleLinear().domain([0,90]).range([0,h])
+                var xScale = d3.scaleBand().domain(d3.range(data.length)).range([0,w]).round(true).paddingInner(.1)
+                var cScale = d3.scaleLinear().domain([0,90]).range(["#aaa","#000"])
+                var svg = d3.select("#chart1")
+                            .append("svg")
+                            .attr("width",w)
+                            .attr("height",h)
+                svg.selectAll("rect")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("x",function(d,i){
+                        return xScale(i)
+                    })
+                    .attr("y",function(d){
+                        return h-yScale(d.commute)
+                    })
+                    .attr("width",xScale.bandwidth())
+                    .attr("height",function(d){
+                        return yScale(d.commute)
+                    })
+                    .attr("fill",function(d){
+                        return cScale(d.commute)
+                    })
+                    .attr("opacity",.5)
+
+                    //make a new variable to keep track of which order to sort data
+                    //in this case we are saying ascending is true
+                    var ascending = true
+
+                  	var button = d3.select("#button1")
+                            .on("click",function(){
+                                //let's make a new function that will sort the bars in either ascending or descending order
+                                //the sortBars function is defined below, and we are calling it here
+                                sortBars()
+
+                                if(ascending ==true){//if it is in ascending order
+                                    ascending = false//set ascending to false for next time
+                                    //let's also change the text in the button so that we have a visible indicator below
+                                    //select the button below and set the html text accordingly
+                                    d3.select("#button1").html("click to sort ascending")
+                                }else{
+                                    ascending = true//if it was false, then set it to true
+                                    //change the button div's html again according to its current state
+                                    d3.select("#button1").html("click to sort descending")
+                                }
+                            })
+
+                    //sortbars is defined as below
+                    //this function is inside the drawChart function because we need access to a few variables.
+                    function sortBars(){
+                      d3.selectAll("rect")
+                        .sort(function(a,b){
+                            //in the sort function make a if else statement depending on the ascending variable
+                            if(ascending == true){//if ascending is true, then sort in descending order
+                                //sort it descending
+                                return d3.descending(parseInt(a.commute),parseInt(b.commute))
+                            }else{
+                                //else if it is false, then sort it the other way
+                                return d3.ascending(parseInt(a.commute),parseInt(b.commute))
+                            }
+                        })
+                        //after sorting in either order, we do the same transition and move the x of each rect according to the orders
+                        .transition()
+                        .duration(1000)
+                        .delay(function(d,i){
+                            return i*100
+                        })
+                        .attr("x",function(d,i){
+                            return xScale(i)
+                        })
+                    }
+
+            }
+
+        </script>
+	</body>
+</html>
