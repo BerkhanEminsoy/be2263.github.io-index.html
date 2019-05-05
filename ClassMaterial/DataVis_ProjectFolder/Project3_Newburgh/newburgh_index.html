@@ -39,7 +39,7 @@
        position: absolute;
        z-index: 1;
        top: 10px;
-       right: 10px;
+       right: 50px;
        border-radius: 3px;
        width: 120px;
        border: 1px solid rgba(0,0,0,0.4);
@@ -90,8 +90,6 @@
        <br>Zoom in to the map to explore the impact the contamination has caused tree assemblies to deteriorate and pose risks to their surroundings.
   </div>
 
-  <nav id="menu"></nav>
-
   <div>
      <script type="text/javascript">
 
@@ -112,6 +110,7 @@
 
   <!-- START MapBox Map -->
   <div id='map'>
+  <nav id="menu"></nav>
   <script type="text/javascript">
 
       mapboxgl.accessToken = 'pk.eyJ1Ijoic2xlN2VuIiwiYSI6ImNqdHU0ZTM2NTFpazY0M20ya3B1aWRlNGwifQ.CWoYi8qNg9jIIkdbSTQ_Qg';
@@ -147,12 +146,49 @@
 
       //a loop to format all the properties - you need to filter this list down to what you want to show
       function formatProperties(properties){
+
+          //delete unwanted property fields ; cleaner way?
+          delete properties.ADDRESS
+          delete properties.ASSIGNED
+          delete properties.INSPECT
+          delete properties.EDITTIME
+          delete properties.CULTIVAR
+          delete properties.DATE
+          delete properties.OBJECTID
+          delete properties.FROM_
+          delete properties.TO
+          delete properties.ID
+          delete properties.ROW
+          delete properties.STAFF
+          delete properties.GlobalID
+          delete properties.MAINT
+          delete properties.MAINTSEC
+          delete properties.POINT_X
+          delete properties.POINT_Y
+          delete properties.UNIQUEID
+          delete properties.OHUTILITY
+          delete properties.TIME
+          delete properties.SIDE
+          delete properties.SPACESIZE
+
+
+          //trying to remove objects using splice method
+          //properties.splice(0,1);
           console.log(properties)
 
-          //function filterProperties (properties){
-          //  return properties =
-          //}
+          /*
+          //filter function to be used in a filter method
+          function filterProperties (properties){
+            return this.properties != "ADDRESS" || "ASSIGNED" || "INSPECT" || "EDITTIME";
+          }
+          */
 
+          //splice properties to remove key values
+          /*
+          function removeProperties (properties){
+            properties.splice(0,1)
+          }
+          */
 
           //start with a empty string here
           var formattedString = ""
@@ -160,8 +196,10 @@
           //as we loop, we add the key and values to the empty string
           for(var p in properties){
               console.log(p)
-              if (p == "ADDRESS" || "ASSIGNED" || "INSPECT" || "EDITTIME" ) { continue; }
-              //else {
+
+              //check for key values to be omitted then continue loop if you hit one
+              //if (p == "ADDRESS" || "ASSIGNED" || "INSPECT" || "EDITTIME" ) { continue; }
+
                 //we just add strings with + sign like before in d3
                 formattedString += p+": "+properties[p]+"<br>";
           }
@@ -180,54 +218,7 @@
           map.getCanvas().style.cursor = '';
       });
 
-
-/*
-      map.on('load', function () {
-
-
-          map.addSource('ContaminatedSitesMap', {
-              "type": 'vector',
-              "url": 'mapbox://styles/sle7en/cjuo5xbyhb9aj1fn087jfcwi0'
-          });
-
-
-          map.addLayer({
-              'id': 'ContaminatedSitesMap',
-              'type': 'vector',
-              'source':  {
-                "type": 'heatmap',
-                "tiles": ["https://studio.mapbox.com/tilesets/sle7en.cjund4msu08ia33pp9nuu7k4z-8bm5v/"],
-                "minzoom": 6,
-                "maxzoom": 14
-              },
-              'layout': {
-                'visibility': 'visible'
-              },
-              'paint': {
-                'heatmap-color': [
-                  "step",
-                  ["heatmap-density"],
-                  "hsla(0, 0%, 0%, 0)",
-                  0.05,
-                  "hsla(355, 100%, 32%, 0.33)",
-                  0.1,
-                  "hsla(355, 100%, 32%, 0.5)",
-                  0.2,
-                  "hsla(355, 100%, 32%, 0.75)",
-                  0.5,
-                  "hsla(355, 100%, 32%, 0.85)",
-                  1,
-                  "hsl(355, 100%, 32%)"
-                ],
-              },
-              'source-layer': 'ContaminatedSitesMap'
-          });
-      });
-
-*/
-
-
-      var toggleableLayerIds = [ 'Contaminated Sites','Contours' ];
+      var toggleableLayerIds = [ 'Contaminated Sites',/*'Contours'*/ 'Risk','Condition' ];
 
       for (var i = 0; i < toggleableLayerIds.length; i++) {
           var id = toggleableLayerIds[i];
@@ -259,34 +250,9 @@
           layers.appendChild(link);
       }
 
+      //zoom-in zoom-out change pan
       map.addControl(new mapboxgl.NavigationControl());
 
-
-      /*
-      map.on('mousemove', function(e) {
-          var features = map.queryRenderedFeatures(e.point, {
-              layers: ['pillbox-data'] // replace this with the name of the layer
-          });
-
-          if (!features.length) {
-              return;
-          }
-
-          var feature = features[0];
-
-          var popup = new mapboxgl.Popup({
-                  offset: [0, -15]
-              })
-              .setLngLat(feature.geometry.coordinates)
-              .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
-              .setLngLat(feature.geometry.coordinates)
-              .addTo(map);
-      });
-
-      map.addControl(new MapboxGeocoder({
-          accessToken: mapboxgl.accessToken
-      }));
-      */
   </script>
   </div>
   <!-- END MapBox Map -->
