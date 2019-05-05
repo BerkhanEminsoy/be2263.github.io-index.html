@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Display a map</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <!-- <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script> -->
+  <!-- <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' /> -->
+
+  <!-- <script src='https://api.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js'></script> -->
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+<body>
+
+<div id='map'></div>
+<!-- <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2xlN2VuIiwiYSI6ImNqdHU0ZTM2NTFpazY0M20ya3B1aWRlNGwifQ.CWoYi8qNg9jIIkdbSTQ_Qg';
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/sle7en/cju4xglos0b0j1fqegaz4kde9',
+  center: [-74.013239, 41.504673],
+  zoom: 13.6
+});
+
+map.on('load', function () {
+    //this console log line prints out all the layers in your map style currently, so you can find the right one to target.
+    console.log(map.getStyle().layers)
+    //add a click handler - takes the click, and the layer name, gets e, which is that object on that layer which is clicked
+    map.on('click', 'NewburghTreeInventory', function (e) {
+        console.log(e)
+        //this is the data in that object - I just console logged e to find the nested structure so I can navigate to it
+        var dataWeWant = e.features[0].properties
+        //this just uses the function below to format it so we can see it all in the popup
+        var displayText = formatProperties(dataWeWant)
+        //we now make the pop up
+        new mapboxgl.Popup()
+            //the popup has the lat and long of our mouse
+            .setLngLat(e.lngLat)
+            //it has the html content of our formatted text
+            .setHTML(displayText)
+            //we add it to our map
+            .addTo(map);
+    });        
+});
+
+//a loop to format all the properties - you need to filter this list down to what you want to show
+function formatProperties(properties){
+
+    //start with a empty string here
+    var formattedString = ""
+
+    //as we loop, we add the key and values to the empty string
+    for(var p in properties){
+        //we just add strings with + sign like before in d3
+        formattedString += p+": "+properties[p]+"<br>"
+    }
+
+    //return everything that was added together - goes back to line 34:var displayText = formatProperties(dataWeWant)
+    return formattedString
+}
+
+</script> -->
+
+</body>
+</html>

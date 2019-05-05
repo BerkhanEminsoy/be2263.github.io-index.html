@@ -72,7 +72,7 @@
        color: #ffffff;
        }
 
-       #menu a.active:hover {
+  #menu a.active:hover {
        background: #3074a4;
        }
 
@@ -91,6 +91,25 @@
   </div>
 
   <nav id="menu"></nav>
+
+  <div>
+     <script type="text/javascript">
+
+     var width = window.innerWidth
+     var height = window.innerHeight
+
+     var TreeInventoryData = "Data/TreeInventoryUTM_Edit.csv"
+
+     Promise.all([d3.csv(TreeInventoryData)])
+            .catch(function(error){console.log("error! " + error.name + error.message)}) //error catching function I found online. Is this the proper way to uset this?
+            .then(function(data) {
+             var trees = data[0];
+             console.log(data[0], typeof data[0]);
+     });
+
+     </script>
+  </div>
+
   <!-- START MapBox Map -->
   <div id='map'>
   <script type="text/javascript">
@@ -104,13 +123,73 @@
       });
 
       map.on('load', function () {
-        
-          /*
+          //this console log line prints out all the layers in your map style currently, so you can find the right one to target.
+          console.log(map.getStyle().layers)
+
+          //add a click handler - takes the click, and the layer name, gets e, which is that object on that layer which is clicked
+      map.on('click', 'NewburghTreeIndex_Fill', function (e) {
+          console.log(e)
+          //this is the data in that object - I just console logged e to find the nested structure so I can navigate to it
+          var dataWeWant = e.features[0].properties
+          console.log(dataWeWant)
+          //this just uses the function below to format it so we can see it all in the popup
+          var displayText = formatProperties(dataWeWant)
+          //we now make the pop up
+          new mapboxgl.Popup()
+              //the popup has the lat and long of our mouse
+              .setLngLat(e.lngLat)
+              //it has the html content of our formatted text
+              .setHTML(displayText)
+              //we add it to our map
+              .addTo(map);
+          });
+      });
+
+      //a loop to format all the properties - you need to filter this list down to what you want to show
+      function formatProperties(properties){
+          console.log(properties)
+
+          //function filterProperties (properties){
+          //  return properties =
+          //}
+
+
+          //start with a empty string here
+          var formattedString = ""
+
+          //as we loop, we add the key and values to the empty string
+          for(var p in properties){
+              console.log(p)
+              if (p == "ADDRESS" || "ASSIGNED" || "INSPECT" || "EDITTIME" ) { continue; }
+              //else {
+                //we just add strings with + sign like before in d3
+                formattedString += p+": "+properties[p]+"<br>";
+          }
+
+          //return everything that was added together - goes back to line 115:var displayText = formatProperties(dataWeWant)
+          return formattedString
+      }
+
+      // Change the cursor to a pointer when the mouse is over the places layer.
+      map.on('mouseenter', 'NewburghTreeIndex_Fill', function () {
+          map.getCanvas().style.cursor = 'default';
+      });
+
+      // Change it back to a pointer when it leaves.
+      map.on('mouseleave', 'NewburghTreeIndex_Fill', function () {
+          map.getCanvas().style.cursor = '';
+      });
+
+
+/*
+      map.on('load', function () {
+
+
           map.addSource('ContaminatedSitesMap', {
               "type": 'vector',
               "url": 'mapbox://styles/sle7en/cjuo5xbyhb9aj1fn087jfcwi0'
           });
-          */
+
 
           map.addLayer({
               'id': 'ContaminatedSitesMap',
@@ -145,10 +224,14 @@
           });
       });
 
-      var toggleableLayerIds = [ 'ContaminatedSitesMap','contours' ];
+*/
+
+
+      var toggleableLayerIds = [ 'Contaminated Sites','Contours' ];
 
       for (var i = 0; i < toggleableLayerIds.length; i++) {
           var id = toggleableLayerIds[i];
+          console.log(id)
 
           var link = document.createElement('a');
 
@@ -208,28 +291,5 @@
   </div>
   <!-- END MapBox Map -->
 
-  <div>
-     <script type="text/javascript">
-
-     var width = window.innerWidth
-     var height = window.innerHeight
-
-     var TreeInventoryData = "Data/TreeInventoryUTM_Edit.csv"
-
-     Promise.all([d3.csv(TreeInventoryData)])
-            .catch(function(error){console.log("error! " + error.name + error.message)}) //error catching function I found online. Is this the proper way to uset this?
-            .then(function(data) {
-             var trees = data[0];
-             console.log(data[0], typeof data[0]);
-     });
-
-
-
-
-
-
-
-     </script>
-  </div>
 </body>
 </html>
