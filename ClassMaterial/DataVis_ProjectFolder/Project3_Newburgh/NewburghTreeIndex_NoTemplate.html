@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" /> -->
+  <title>Newburgh Tree Index</title>
+  <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+
+  <!-- START MapBox Supplement Code -->
+  <title>Display a map</title>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+  <link rel="stylesheet" href="https://use.typekit.net/fqr8wuw.css">
+  <!-- END MapBox Supplement Code -->
+
+  <!-- BEGIN CSS STYLE -->
+  <style>
+
+    body { margin:0px;
+           padding:20px;
+           font-family: mr-eaves-xl-modern,sans-serif;
+           font-weight: 300;
+           font-style: normal;
+           width:100%;
+         }
+
+    #map { position:absolute;
+           top:130px;
+           bottom:20px;
+           width:97.5%;
+           height:80%;
+           border-radius:30px;
+         }
+
+    #menu {
+         background: #fff;
+         position: absolute;
+         z-index: 1;
+         top: 10px;
+         right: 50px;
+         border-radius: 3px;
+         width: 120px;
+         border: 1px solid rgba(0,0,0,0.4);
+         font-family: 'Open Sans', sans-serif;
+         }
+
+    #menu a {
+         font-size: 13px;
+         color: #404040;
+         display: block;
+         margin: 0;
+         padding: 0;
+         padding: 10px;
+         text-decoration: none;
+         border-bottom: 1px solid rgba(0,0,0,0.25);
+         text-align: center;
+         }
+
+    #menu a:last-child {
+         border: none;
+         }
+
+    #menu a:hover {
+         background-color: #f8f8f8;
+         color: #404040;
+         }
+
+    #menu a.active {
+         background-color: #3887be;
+         color: #ffffff;
+         }
+
+    #menu a.active:hover {
+         background: #3074a4;
+         }
+
+  </style>
+  <!-- END CSS STYLE -->
+
+
+</head>
+<body>
+
+  <div id="title">Newburgh Tree Index | by the <strong>Newburghers</strong></div>
+  <div id="intro">
+    <p>
+    WELCOME!!! Here is a tool to explore Newburgh's tree inventory in relation to contaminated sites.
+    <br>We are seeking to find if there is a correlation between contamination levels and the condition of trees in the city of Newburgh.
+    <br>The health of Newburgh’s trees are jeopardised by contaminated sites dispersed across the city.
+    <br>Zoom in to the map to explore the impact the contamination has caused tree assemblies to deteriorate and pose risks to their surroundings.
+    </p>
+  </div>
+  <!-- BEGIN MAIN JAVA DIV -->
+  <div>
+     <script type="text/javascript">
+
+     var width = window.innerWidth
+     var height = window.innerHeight
+
+     //Store CSV Data in a variable
+     var TreeInventoryData = "Data/TreeInventoryUTM_Edit.csv"
+
+     //Load CSV DATA.
+     Promise.all([d3.csv(TreeInventoryData)])
+            .catch(function(error){console.log("error! " + error.name + error.message)}) //error catching function I found online. Is this the proper way to uset this?
+            .then(function(data) {
+             var trees = data[0];
+             console.log(data[0], typeof data[0]);
+     });
+
+     </script>
+  </div>
+  <!-- END MAIN JAVA DIV -->
+
+  <!-- BEGIN MapBox Map -->
+  <div id='map'>
+      <nav id="menu"></nav>
+      <script type="text/javascript">
+
+          mapboxgl.accessToken = 'pk.eyJ1Ijoic2xlN2VuIiwiYSI6ImNqdHU0ZTM2NTFpazY0M20ya3B1aWRlNGwifQ.CWoYi8qNg9jIIkdbSTQ_Qg';
+          var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/sle7en/cjuo5xbyhb9aj1fn087jfcwi0',
+            center: [-74.024, 41.505],
+            zoom: 13.5
+          });
+
+          map.on('load', function () {
+              //this console log line prints out all the layers in your map style currently, so you can find the right one to target.
+              console.log(map.getStyle().layers)
+
+              //add a click handler - takes the click, and the layer name, gets e, which is that object on that layer which is clicked
+          map.on('click', 'NewburghTreeIndex_Fill', function (e) {
+              console.log(e)
+              //this is the data in that object - I just console logged e to find the nested structure so I can navigate to it
+              var dataWeWant = e.features[0].properties
+              console.log(dataWeWant)
+              //this just uses the function below to format it so we can see it all in the popup
+              var displayText = formatProperties(dataWeWant)
+              //we now make the pop up
+              new mapboxgl.Popup()
+                  //the popup has the lat and long of our mouse
+                  .setLngLat(e.lngLat)
+                  //it has the html content of our formatted text
+                  .setHTML(displayText)
+                  //we add it to our map
+                  .addTo(map);
+              });
+          });
+
+          //a loop to format all the properties - you need to filter this list down to what you want to show
+          function formatProperties(properties){
+
+              //delete unwanted property fields ; cleaner way?
+              delete properties.ADDRESS
+              delete properties.ASSIGNED
+              delete properties.INSPECT
+              delete properties.EDITTIME
+              delete properties.CULTIVAR
+              delete properties.DATE
+              delete properties.OBJECTID
+              delete properties.FROM_
+              delete properties.TO
+              delete properties.ID
+              delete properties.ROW
+              delete properties.STAFF
+              delete properties.GlobalID
+              delete properties.MAINT
+              delete properties.MAINTSEC
+              delete properties.POINT_X
+              delete properties.POINT_Y
+              delete properties.UNIQUEID
+              delete properties.OHUTILITY
+              delete properties.TIME
+              delete properties.SIDE
+              delete properties.SPACESIZE
+
+
+              //trying to remove objects using splice method
+              //properties.splice(0,1);
+              console.log(properties)
+
+              /*
+              //filter function to be used in a filter method
+              function filterProperties (properties){
+                return this.properties != "ADDRESS" || "ASSIGNED" || "INSPECT" || "EDITTIME";
+              }
+              */
+
+              //splice properties to remove key values
+              /*
+              function removeProperties (properties){
+                properties.splice(0,1)
+              }
+              */
+
+              //start with a empty string here
+              var formattedString = ""
+
+              //as we loop, we add the key and values to the empty string
+              for(var p in properties){
+                  console.log(p)
+
+                  //check for key values to be omitted then continue loop if you hit one
+                  //if (p == "ADDRESS" || "ASSIGNED" || "INSPECT" || "EDITTIME" ) { continue; }
+
+                    //we just add strings with + sign like before in d3
+                    formattedString += p+": "+properties[p]+"<br>";
+              }
+
+              //return everything that was added together - goes back to line 115:var displayText = formatProperties(dataWeWant)
+              return formattedString
+          }
+
+          // Change the cursor to a pointer when the mouse is over the places layer.
+          map.on('mouseenter', 'NewburghTreeIndex_Fill', function () {
+              map.getCanvas().style.cursor = 'default';
+          });
+
+          // Change it back to a pointer when it leaves.
+          map.on('mouseleave', 'NewburghTreeIndex_Fill', function () {
+              map.getCanvas().style.cursor = '';
+          });
+
+          var toggleableLayerIds = [ 'Contaminated Sites',/*'Contours'*/ 'Risk','Condition' ];
+
+          for (var i = 0; i < toggleableLayerIds.length; i++) {
+              var id = toggleableLayerIds[i];
+              console.log(id)
+
+              var link = document.createElement('a');
+
+              link.href = '#';
+              link.className = 'active';
+              link.textContent = id;
+
+              link.onclick = function (e) {
+                  var clickedLayer = this.textContent;
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+                  if (visibility === 'visible') {
+                      map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                      this.className = '';
+                  } else {
+                      this.className = 'active';
+                      map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                  }
+              };
+
+              var layers = document.getElementById('menu');
+              layers.appendChild(link);
+          }
+
+          //zoom-in zoom-out change pan
+          map.addControl(new mapboxgl.NavigationControl());
+
+      </script>
+    </div>
+  <!-- END MapBox Map -->
+
+</body>
+</html>

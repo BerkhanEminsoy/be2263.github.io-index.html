@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<!-- Template by Quackit.com -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- <link href="../favicon.ico" rel="shortcut icon" type="image/x-icon" /> -->
+  <title>Newburgh Tree Index</title>
+  <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS: You can use this stylesheet to override any Bootstrap styles and/or apply your own styles -->
+  <link href="css/custom.css" rel="stylesheet">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Custom Fonts from Google -->
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- START MapBox Supplement Code -->
+  <title>Display a map</title>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+  <link rel="stylesheet" href="https://use.typekit.net/fqr8wuw.css">
+  <!-- END MapBox Supplement Code -->
+
+  <!-- BEGIN CSS STYLE -->
+  <style>
+
+    body { margin:0px;
+           padding:20px;
+           font-family: mr-eaves-xl-modern,sans-serif;
+           font-weight: 300;
+           font-style: normal;
+           width:100%;
+         }
+
+    #map { position:absolute;
+           top:600px;
+           bottom:20px;
+           width:97.5%;
+           height:90%;
+           border-radius:30px;
+         }
+
+    #menu {
+         background: #fff;
+         position: absolute;
+         z-index: 1;
+         top: 10px;
+         right: 50px;
+         border-radius: 3px;
+         width: 120px;
+         border: 1px solid rgba(0,0,0,0.4);
+         font-family: 'Open Sans', sans-serif;
+         }
+
+    #menu a {
+         font-size: 13px;
+         color: #404040;
+         display: block;
+         margin: 0;
+         padding: 0;
+         padding: 10px;
+         text-decoration: none;
+         border-bottom: 1px solid rgba(0,0,0,0.25);
+         text-align: center;
+         }
+
+    #menu a:last-child {
+         border: none;
+         }
+
+    #menu a:hover {
+         background-color: #f8f8f8;
+         color: #404040;
+         }
+
+    #menu a.active {
+         background-color: #3887be;
+         color: #ffffff;
+         }
+
+    #menu a.active:hover {
+         background: #3074a4;
+         }
+
+  </style>
+  <!-- END CSS STYLE -->
+
+
+</head>
+<body>
+  <!-- Navigation -->
+  <nav id="siteNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+          <!-- Logo and responsive toggle -->
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">
+                <span class="glyphicon glyphicon-fire"></span>
+                NEWBURGH'S TREE INDEX
+              </a>
+          </div>
+          <!-- Navbar links -->
+          <!-- <div class="collapse navbar-collapse" id="navbar">
+              <ul class="nav navbar-nav navbar-right">
+                  <li class="active">
+                      <a href="#">Home</a>
+                  </li>
+                  <li>
+                      <a href="#">Products</a>
+                  </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Services <span class="caret"></span></a>
+          <ul class="dropdown-menu" aria-labelledby="about-us">
+            <li><a href="#">Engage</a></li>
+            <li><a href="#">Pontificate</a></li>
+            <li><a href="#">Synergize</a></li>
+          </ul>
+        </li>
+                  <li>
+                      <a href="#">Contact</a>
+                  </li>
+              </ul>
+
+          </div> /.navbar-collapse -->
+      </div><!-- /.container -->
+  </nav>
+  <!-- END Navigation -->
+
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+        <div class="header-content-inner">
+            <h1>The Health of Newburgh's Trees</h1>
+            <p>The health of Newburgh’s trees is jeopardised by contamination that is focused in various sites across the city. Explore this representation that shows the impact that the contamination has had on tree assemblages, their risk of failing and the consequences of their failure.</p>
+            <!-- <a href="#" class="btn btn-primary btn-lg">Explore</a> -->
+        </div>
+    </div>
+  </header>
+  <!-- END Header -->
+
+  <div id="title">Newburgh Tree Index | by the <strong>Newburghers</strong></div>
+  <div id="intro">
+    <p>
+    WELCOME!!! Here is a tool to explore Newburgh's tree inventory in relation to contaminated sites.
+    <br>We are seeking to find if there is a correlation between contamination levels and the condition of trees in the city of Newburgh.
+    <br>The health of Newburgh’s trees are jeopardised by contaminated sites dispersed across the city.
+    <br>Zoom in to the map to explore the impact the contamination has caused tree assemblies to deteriorate and pose risks to their surroundings.
+    </p>
+  </div>
+  <!-- BEGIN MAIN JAVA DIV -->
+  <div>
+     <script type="text/javascript">
+
+     var width = window.innerWidth
+     var height = window.innerHeight
+
+     //Store CSV Data in a variable
+     var TreeInventoryData = "Data/TreeInventoryUTM_Edit.csv"
+
+     //Load CSV DATA.
+     Promise.all([d3.csv(TreeInventoryData)])
+            .catch(function(error){console.log("error! " + error.name + error.message)}) //error catching function I found online. Is this the proper way to uset this?
+            .then(function(data) {
+             var trees = data[0];
+             console.log(data[0], typeof data[0]);
+     });
+
+     </script>
+  </div>
+  <!-- END MAIN JAVA DIV -->
+
+  <!-- BEGIN MapBox Map -->
+  <section>
+    <div id='map'>
+      <nav id="menu"></nav>
+      <script type="text/javascript">
+
+          mapboxgl.accessToken = 'pk.eyJ1Ijoic2xlN2VuIiwiYSI6ImNqdHU0ZTM2NTFpazY0M20ya3B1aWRlNGwifQ.CWoYi8qNg9jIIkdbSTQ_Qg';
+          var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/sle7en/cjuo5xbyhb9aj1fn087jfcwi0',
+            center: [-74.024, 41.505],
+            zoom: 13.5
+          });
+
+          map.on('load', function () {
+              //this console log line prints out all the layers in your map style currently, so you can find the right one to target.
+              console.log(map.getStyle().layers)
+
+              //add a click handler - takes the click, and the layer name, gets e, which is that object on that layer which is clicked
+          map.on('click', 'NewburghTreeIndex_Fill', function (e) {
+              console.log(e)
+              //this is the data in that object - I just console logged e to find the nested structure so I can navigate to it
+              var dataWeWant = e.features[0].properties
+              console.log(dataWeWant)
+              //this just uses the function below to format it so we can see it all in the popup
+              var displayText = formatProperties(dataWeWant)
+              //we now make the pop up
+              new mapboxgl.Popup()
+                  //the popup has the lat and long of our mouse
+                  .setLngLat(e.lngLat)
+                  //it has the html content of our formatted text
+                  .setHTML(displayText)
+                  //we add it to our map
+                  .addTo(map);
+              });
+          });
+
+          //a loop to format all the properties - you need to filter this list down to what you want to show
+          function formatProperties(properties){
+
+              //delete unwanted property fields ; cleaner way?
+              delete properties.ADDRESS
+              delete properties.ASSIGNED
+              delete properties.INSPECT
+              delete properties.EDITTIME
+              delete properties.CULTIVAR
+              delete properties.DATE
+              delete properties.OBJECTID
+              delete properties.FROM_
+              delete properties.TO
+              delete properties.ID
+              delete properties.ROW
+              delete properties.STAFF
+              delete properties.GlobalID
+              delete properties.MAINT
+              delete properties.MAINTSEC
+              delete properties.POINT_X
+              delete properties.POINT_Y
+              delete properties.UNIQUEID
+              delete properties.OHUTILITY
+              delete properties.TIME
+              delete properties.SIDE
+              delete properties.SPACESIZE
+
+
+              //trying to remove objects using splice method
+              //properties.splice(0,1);
+              console.log(properties)
+
+              /*
+              //filter function to be used in a filter method
+              function filterProperties (properties){
+                return this.properties != "ADDRESS" || "ASSIGNED" || "INSPECT" || "EDITTIME";
+              }
+              */
+
+              //splice properties to remove key values
+              /*
+              function removeProperties (properties){
+                properties.splice(0,1)
+              }
+              */
+
+              //start with a empty string here
+              var formattedString = ""
+
+              //as we loop, we add the key and values to the empty string
+              for(var p in properties){
+                  console.log(p)
+
+                  //check for key values to be omitted then continue loop if you hit one
+                  //if (p == "ADDRESS" || "ASSIGNED" || "INSPECT" || "EDITTIME" ) { continue; }
+
+                    //we just add strings with + sign like before in d3
+                    formattedString += p+": "+properties[p]+"<br>";
+              }
+
+              //return everything that was added together - goes back to line 115:var displayText = formatProperties(dataWeWant)
+              return formattedString
+          }
+
+          // Change the cursor to a pointer when the mouse is over the places layer.
+          map.on('mouseenter', 'NewburghTreeIndex_Fill', function () {
+              map.getCanvas().style.cursor = 'default';
+          });
+
+          // Change it back to a pointer when it leaves.
+          map.on('mouseleave', 'NewburghTreeIndex_Fill', function () {
+              map.getCanvas().style.cursor = '';
+          });
+
+          var toggleableLayerIds = [ 'Contaminated Sites',/*'Contours'*/ 'Risk','Condition' ];
+
+          for (var i = 0; i < toggleableLayerIds.length; i++) {
+              var id = toggleableLayerIds[i];
+              console.log(id)
+
+              var link = document.createElement('a');
+
+              link.href = '#';
+              link.className = 'active';
+              link.textContent = id;
+
+              link.onclick = function (e) {
+                  var clickedLayer = this.textContent;
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+                  if (visibility === 'visible') {
+                      map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                      this.className = '';
+                  } else {
+                      this.className = 'active';
+                      map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                  }
+              };
+
+              var layers = document.getElementById('menu');
+              layers.appendChild(link);
+          }
+
+          //zoom-in zoom-out change pan
+          map.addControl(new mapboxgl.NavigationControl());
+
+      </script>
+    </div>
+  </section>
+  <!-- END MapBox Map -->
+
+  <!-- Intro Section -->
+  <section class="intro">
+      <div  class="container">
+        <br></br>
+          <br></br>
+            <br></br>
+              <br></br>
+                <br></br>
+                  <br></br>
+                    <br></br>
+                      <br></br>
+                        <br></br>
+                          <br></br><br></br>
+
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                  <span class="glyphicon glyphicon-apple" style="font-size: 60px"></span>
+                    <h2 class="section-heading">An opportunity for remediation</h2>
+                    <p class="text-light">Newburgh is currently a food desert and has difficulties in providing affordable or good-quality fresh food to its residents. The source of the issue comes from the pervasive contamination of past industrial processes and land misuse.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+  <!-- END Intro Section -->
+
+  <!-- Content 1 -->
+  <section class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <img class="img-responsive img-circle center-block" src="images/microphone.jpg" alt="">
+                </div>
+                <div class="col-sm-6">
+                  <h2 class="section-header">Tree clustering</h2>
+                  <p class="lead text-muted">Exploring the map shows that there is healthy proliferation of trees in and around Downing Park where contamination is minimal.</p>
+                  <!-- <a href="#" class="btn btn-primary btn-lg">Classify It</a> -->
+                </div>
+
+            </div>
+        </div>
+    </section>
+  <!-- END Content 1 -->
+
+  <!-- Content 2 -->
+  <section class="content content-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                  <h2 class="section-header">The impact of contamination</h2>
+                  <p class="lead text-light">In contrast to this, right by the two contaminated sites 7-11 Johnes Street and 4 Renwick Street that were formerly a natural gas regulator station, propane peaking facility and drycleaning facility, it is evident that the trees in close proximity are in high risk of failing and in poor condition. </p>
+                  <!-- <a href="#" class="btn btn-default btn-lg">Test It</a> -->
+                </div>
+                <div class="col-sm-6">
+                    <img class="img-responsive img-circle center-block" src="images/iphone.jpg" alt="">
+                </div>
+
+            </div>
+        </div>
+     </section>
+  <!-- END Content 2 -->
+
+  <!-- Promos -->
+  <div class="container-fluid">
+        <div class="row promo">
+          <a href="#">
+        <div class="col-md-4 promo-item item-1">
+          <!-- <h3>
+            Unleash
+          </h3> -->
+        </div>
+            </a>
+            <a href="#">
+        <div class="col-md-4 promo-item item-2">
+          <!-- <h3>
+            Synergize
+          </h3> -->
+        </div>
+            </a>
+
+      <a href="#">
+        <div class="col-md-4 promo-item item-3">
+          <!-- <h3>
+            Procrastinate
+          </h3> -->
+        </div>
+            </a>
+        </div>
+    </div><!-- /.container-fluid -->
+  <!-- END Promos -->
+
+  <!-- Content 3
+  <section class="content content-3">
+      <div class="container">
+        <h2 class="section-header"><span class="glyphicon glyphicon-pushpin text-primary"></span><br> Sanity Check</h2>
+        <p class="lead text-muted">Holisticly predominate extensible testing procedures for reliable supply chains. Dynamically innovate resource-leveling customer service for state of the art customer service.</p>
+        <a href="#" class="btn btn-primary btn-lg">Check Now</a>
+        </div>
+    </section>
+  END Content 3 -->
+
+  <!--BEGIN Footer -->
+  <footer class="page-footer">
+
+      <!-- Contact Us -->
+        <div class="contact">
+          <div class="container">
+        <h2 class="section-heading">Berkhan Eminsoy & Zeid Ghawi</h2>
+        <p><!-- <span class="glyphicon glyphicon-earphone"></span> --><br> Data Viz Spring 2019</p>
+        <!-- <p><span class="glyphicon glyphicon-envelope"></span><br> info@example.com</p> -->
+          </div>
+        </div>
+
+        <!-- Copyright etc -->
+        <!-- <div class="small-print">
+          <div class="container">
+            <p>Copyright &copy; Example.com 2015</p>
+          </div>
+        </div> -->
+
+    </footer>
+  <!-- END Footer -->
+
+  <!-- jQuery -->
+  <script src="js/jquery-1.11.3.min.js"></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="js/jquery.easing.min.js"></script>
+
+  <!-- Custom Javascript -->
+  <script src="js/custom.js"></script>
+
+
+</body>
+</html>
