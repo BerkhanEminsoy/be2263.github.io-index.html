@@ -30,16 +30,9 @@
 
       }
 
-      .button{
-         border:2px solid #000;
-         border-radius:0px;
-         padding:10px;
-         width:200px;
-         font-family: "Helvetica", sans-serif;
-         background-color: black;
-         color: white;
-       }
+      input{
 
+      }
 
     </style>
 </head>
@@ -48,11 +41,6 @@
 
   <!--<iframe src="https://giphy.com/embed/l2JHPc1s3B7m3Bc9q" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>-->
   <!--<iframe src="https://giphy.com/embed/3oGRFAaBmep9OL4Vwc" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>-->
-
-
-  <div class="button">1-2 Family Dwelling </div>
-  <div class="button">3+ Family Apt. Bldg.</div>
-  <div class="button">ParkingGarage</div>
 
   <!-- different radio buttons for future interactive selection based on 'descriptor' type categories.
   <p>
@@ -65,6 +53,9 @@
 
   <p>
     <input type="button" value="INFEST!!!">
+    <input type="button" value="1-2 Family Dwelling">
+    <input type="button" value="3+ Family Apt. Bldg.">
+    <input type="button" value="Parking Garage">
   </p>
 
   <div id="RodentMap"></div>
@@ -104,7 +95,6 @@
                 drawOutline(geo)
                 drawDots(places,geo)
                 /*console.log(data[1], typeof data[1]);*/
-
         });
 
         function drawOutline(geo){
@@ -146,6 +136,7 @@
 
             //nest or filter the array to color each complaint point by LocationType
             var complaintByLocationType = d3.nest()
+<<<<<<< HEAD
                                             .key(function(d) {
                                               return d.LocationType;
                                             })
@@ -153,6 +144,16 @@
                                             console.log(complaintByLocationType, typeof complaintByLocationType)
 
             /*
+=======
+                                          .key(function(d) {
+                                            console.log(d.LocationType, "type of d:", typeof d.LocationType)
+                                            return d.LocationType;
+                                          })
+                                          .entries(places);
+                                          console.log(complaintByLocationType,"type is:",typeof complaintByLocationType)
+
+            //color complaints by type
+>>>>>>> a75dd42ead65bc19875cd607c96477c3777509db
             var rodentComplaints = svg.selectAll("circle")
             	                        .data(places)
                                       .enter()
@@ -166,13 +167,19 @@
                                       .attr("r", 1)
                                     	.attr("opacity", 0.1)
                                       .attr("fill", function (d){
-                                        console.log(d)
+                                        //console.log(d, typeof d)
                                         if (d.LocationType == "1-2 Family Dwelling")
                                         {return "green"}
                                         return "red"
                                       })
+<<<<<<< HEAD
             */
 
+=======
+
+            //color all complaints one color
+            /*
+>>>>>>> a75dd42ead65bc19875cd607c96477c3777509db
             var rodentComplaints = svg.selectAll("circle")
             	                        .data(complaintByLocationType[0].values)
                                       .enter()
@@ -189,13 +196,7 @@
                                         return "red"
                                       })
 
-                                      /*
-                                      .attr("fill", function(d, i) {
-                                        return colors[colorIndex]
-                                      });
-                                      */
-
-                                      /*
+            /*
                                       d3.nest()
                                         .key(function(d) {
                                           return d.LocationType;
@@ -207,10 +208,12 @@
                                       .attr("fill", function(d){
                                         return colors[i]
                                       });
-                                      */
+
+            */
 
             //Color Expansion INFEST interaction below
             d3.selectAll("input")
+              .select("[value=INFEST!!!]")
               .on("click", function() {
               rodentComplaints.each(expandColor);
               });
