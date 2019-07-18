@@ -96,7 +96,6 @@
           };
         }
 
-
         Promise.all([d3.json(geoPath), d3.csv(dataPath, rowConverter)])
                .catch(function(error){console.log("error! " + error.name + error.message)}) //error catching function I found online. Is this the proper way to uset this?
                .then(function(data) {
@@ -147,11 +146,12 @@
 
             //nest or filter the array to color each complaint point by LocationType
             var complaintByLocationType = d3.nest()
-                                          .key(function(d) {
-                                            return d.LocationType;
-                                          })
-                                          .entries(places);
-                                          console.log(complaintByLocationType, typeof complaintByLocationType)
+                                            .key(function(d) {
+                                              return d.LocationType;
+                                            })
+                                            .entries(places);
+                                            console.log(complaintByLocationType, typeof complaintByLocationType)
+
             /*
             var rodentComplaints = svg.selectAll("circle")
             	                        .data(places)
@@ -172,8 +172,6 @@
                                         return "red"
                                       })
             */
-
-
 
             var rodentComplaints = svg.selectAll("circle")
             	                        .data(complaintByLocationType[0].values)
